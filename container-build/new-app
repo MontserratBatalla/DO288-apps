@@ -2,7 +2,8 @@ oc new-app --name hola \
     https://github.com/MontserratBatalla/DO288-apps#container-build \
     --context-dir container-build
 
-
+git checkout master
+git checkout -b design-container
 git commit -a -m "Changed Dockerfile to enable running as a random uid on OpenShift"
 git push
 cd ~
