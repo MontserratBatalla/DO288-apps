@@ -1,0 +1,40 @@
+oc new-app --name myapp \
+    --build-env npm_config_registry=\
+http://${RHT_OCP4_NEXUS_SERVER}/repository/nodejs \
+    nodejs:10~https://github.com/${RHT_OCP4_GITHUB_USER}/DO288-apps#app-config \
+    --context-dir app-config
+    
+    oc create configmap myappconf 
+    --from-literal APP_MSG="Test Message"
+    
+    oc describe cm/myappconf
+    
+    oc create secret generic myappfilesec 
+    --from-file /home/student/DO288-apps/app-config/myapp.sec
+    
+    oc get secret/myappfilesec -o json
+    
+    Inject the configuration map and the secret into the application container. 
+    oc set env dc/myapp 
+    --from configmap/myappconf
+    
+    oc set volume dc/myapp --add 
+    -t secret -m /opt/app-root/secure 
+    --name myappsec-vol --secret-name myappfilesec
+    
+    Use the oc rsh command to inspect the environment variables in the container: 
+    oc rsh myapp-3-wzdbh env | grep APP_MSG
+    
+   para ver donde esta deplegada la aplicación
+   oc get route 
+   Para comprobar que devuelve
+   curl http://myapp-montserratbatalla-app-config.appsocp-na1.prod.nextcle.com
+   
+   para modificar la variable APP_MSG
+   oc edit cm/myappconf
+   
+   Rollout de las modificaciones
+   oc rollout latest dc/myapp
+
+        
+        
