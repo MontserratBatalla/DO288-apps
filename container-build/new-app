@@ -1,0 +1,3 @@
+oc new-app --name hola \
+    https://github.com/MontserratBatalla/DO288-apps#container-build \
+    --context-dir container-build
