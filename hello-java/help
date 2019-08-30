@@ -1,0 +1,59 @@
+oc login -u ${RHT_OCP4_DEV_USER} \
+    -p ${RHT_OCP4_DEV_PASSWORD} ${RHT_OCP4_MASTER_API}
+    
+    
+new project
+oc new-project \
+    ${RHT_OCP4_DEV_USER}-design-container
+    
+new app
+oc new-app --name elvis \
+    https://github.com/${RHT_OCP4_GITHUB_USER}/DO288-apps#design-container \
+    --context-dir hello-java
+
+ver logs
+    oc logs -f bc/elvis
+mirar pods
+oc get pods
+mirar logs de la app que acabamos de crear
+oc logs elvis····
+
+para cambiar el random user quitar
+useradd wildfly && \
+chown -R wildfly:wildfly /opt/app-root && \
+chmod -R 700 /opt/app-root
+
+
+añadir
+chgrp -R 0 /opt/app-root && \
+chmod -R g=u /opt/app-root
+USER 1001
+
+Subir los cambios a github
+cd hello-java
+git commit -a -m \
+    "Fixed Dockerfile to run with random user id on OpenShift"
+git push
+cd ~
+
+oc start-build elvis
+oc logs -f bc/elvis
+oc get pods
+oc logs elvis...
+
+exponer el servicio
+oc expose svc/elvis
+
+oc get route
+
+probar curl con la ruta
+
+añadir el configmap y ponerlo en la imagen deplegada
+oc create cm appconfig --from-literal APP_MSG="Elvis lives"
+oc describe cm/appconfig
+oc set env dc/elvis --from cm/appconfig
+
+oc status
+oc get pods
+oc rsh elvis-3-ks1np env | grep APP_MSG
+    --from-literal APP_MSG="Elvis lives"
