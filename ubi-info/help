@@ -1,0 +1,23 @@
+Create a new application named "echo" from the Dockerfile in the ubi-echo folder. 
+Use the branch you created in a previous step. It creates, among other resources, a build configuration: 
+
+oc new-app --name echo
+    https://github.com/${RHT_OCP4_GITHUB_USER}/DO288-apps#docker-build 
+    --context-dir ubi-echo
+    
+View logs
+oc logs -f bc/echo
+
+oc status
+oc logs
+
+cd /ubi-info
+FROM registry.access.redhat.com/ubi8/ubi:8.0
+USER 1001
+CMD bash -c "while true; do (( i++ )); echo test \$i; sleep 5; done"
+
+git commit -a -m 'Add a counter'
+git push
+cd ~
+
+start-build
