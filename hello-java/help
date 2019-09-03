@@ -1,0 +1,30 @@
+Colocarse al repositori git que hem clonat
+git checkout master
+Crear una branch
+git checkout -b source-build
+colocar-se a la branch
+git push -u origin source-build
+
+Crear la applicació
+oc new-app --name greet  --build-env npm_config_registry=http://nexus-common.apps.ocp-nal.prod.nextcle.com/repository/nodejs 
+  nodejs:10~https://github.com/MontserratBatalla/DO288-apps#source-build  --context-dir nodejs-helloworld
+  
+  
+oc logs -f bc/greet
+veure l'error, s'ha de modificar a
+cd nodejs-helloworld
+
+git commit -a -m 'Fixed JSON syntax'
+
+git push
+cd ~
+
+tornar a fer el build
+oc start-build --follow bc/greet
+oc status
+oc get pod
+
+oc logs greet-1-gf59d
+oc expose svc/greet
+oc get route
+curl route
