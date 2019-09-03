@@ -1,8 +1,0 @@
-a.	Correct version of ruby image does not exist in openshift registry
-b.	Need to create a new imagestream in openshift and pull in image from local registry
-i.	I was able to find an image in the local registry (docker-registry-cli)
-1.	registry.domain15.example.com:5000/openshift3/rhscl-ruby2.2-rhel 
-ii.	oc import-image  --name rubyred –from registry… –confirm --insecure 
-c.	Then deploy the application with the new builder image (ruby 2.2)
-i.	oc new-app –name hello -i common/hello-world
-d.	Exercise continues with injecting environment variables
